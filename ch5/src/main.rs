@@ -6,32 +6,32 @@ mod process;
 mod processor;
 
 #[macro_use]
-extern crate rcore_console;
+extern crate tg_console;
 
 extern crate alloc;
 
 use alloc::{alloc::alloc, collections::BTreeMap};
 use core::{alloc::Layout, ffi::CStr, mem::MaybeUninit};
 use impls::{Console, Sv39Manager, SyscallContext};
-use kernel_context::foreign::MultislotPortal;
-use kernel_vm::{
+use tg_kernel_context::foreign::MultislotPortal;
+use tg_kernel_vm::{
     page_table::{MmuMeta, Sv39, VAddr, VmFlags, VmMeta, PPN, VPN},
     AddressSpace,
 };
 use process::Process;
 use processor::{ProcManager, PROCESSOR};
-use rcore_console::log;
-use rcore_task_manage::ProcId;
+use tg_console::log;
+use tg_task_manage::ProcId;
 use riscv::register::*;
 use sbi_rt::*;
 use spin::Lazy;
-use syscall::Caller;
+use tg_syscall::Caller;
 use xmas_elf::ElfFile;
 
 // 应用程序内联进来。
 core::arch::global_asm!(include_str!(env!("APP_ASM")));
 // 定义内核入口。
-linker::boot0!(rust_main; stack = 32 * 4096);
+tg_linker::boot0!(rust_main; stack = 32 * 4096);
 // 物理内存容量 = 48 MiB。
 const MEMORY: usize = 48 << 20;
 // 传送门所在虚页。
@@ -44,7 +44,7 @@ static APPS: Lazy<BTreeMap<&'static str, &'static [u8]>> = Lazy::new(|| {
         static app_names: u8;
     }
     unsafe {
-        linker::AppMeta::locate()
+        tg_linker::AppMeta::locate()
             .iter()
             .scan(&app_names as *const _ as usize, |addr, data| {
                 let name = CStr::from_ptr(*addr as _).to_str().unwrap();
@@ -56,17 +56,17 @@ static APPS: Lazy<BTreeMap<&'static str, &'static [u8]>> = Lazy::new(|| {
 });
 
 extern "C" fn rust_main() -> ! {
-    let layout = linker::KernelLayout::locate();
+    let layout = tg_linker::KernelLayout::locate();
     // bss 段清零
     unsafe { layout.zero_bss() };
     // 初始化 `console`
-    rcore_console::init_console(&Console);
-    rcore_console::set_log_level(option_env!("LOG"));
-    rcore_console::test_log();
+    tg_console::init_console(&Console);
+    tg_console::set_log_level(option_env!("LOG"));
+    tg_console::test_log();
     // 初始化内核堆
-    kernel_alloc::init(layout.start() as _);
+    tg_kernel_alloc::init(layout.start() as _);
     unsafe {
-        kernel_alloc::transfer(core::slice::from_raw_parts_mut(
+        tg_kernel_alloc::transfer(core::slice::from_raw_parts_mut(
             layout.end() as _,
             MEMORY - layout.len(),
         ))
@@ -81,10 +81,10 @@ extern "C" fn rust_main() -> ! {
     // 初始化异界传送门
     let portal = unsafe { MultislotPortal::init_transit(PROTAL_TRANSIT.base().val(), 1) };
     // 初始化 syscall
-    syscall::init_io(&SyscallContext);
-    syscall::init_process(&SyscallContext);
-    syscall::init_scheduling(&SyscallContext);
-    syscall::init_clock(&SyscallContext);
+    tg_syscall::init_io(&SyscallContext);
+    tg_syscall::init_process(&SyscallContext);
+    tg_syscall::init_scheduling(&SyscallContext);
+    tg_syscall::init_clock(&SyscallContext);
     // 加载初始进程
     let initproc_data = APPS.get("initproc").unwrap();
     if let Some(process) = Process::from_elf(ElfFile::new(initproc_data).unwrap()) {
@@ -98,12 +98,12 @@ extern "C" fn rust_main() -> ! {
             unsafe { task.context.execute(portal, ()) };
             match scause::read().cause() {
                 scause::Trap::Exception(scause::Exception::UserEnvCall) => {
-                    use syscall::{SyscallId as Id, SyscallResult as Ret};
+                    use tg_syscall::{SyscallId as Id, SyscallResult as Ret};
                     let ctx = &mut task.context.context;
                     ctx.move_next();
                     let id: Id = ctx.a(7).into();
                     let args = [ctx.a(0), ctx.a(1), ctx.a(2), ctx.a(3), ctx.a(4), ctx.a(5)];
-                    match syscall::handle(Caller { entity: 0, flow: 0 }, id, args) {
+                    match tg_syscall::handle(Caller { entity: 0, flow: 0 }, id, args) {
                         Ret::Done(ret) => match id {
                             Id::EXIT => unsafe { PROCESSOR.make_current_exited(ret) },
                             _ => {
@@ -140,11 +140,11 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
     loop {}
 }
 
-fn kernel_space(layout: linker::KernelLayout, memory: usize, portal: usize) {
+fn kernel_space(layout: tg_linker::KernelLayout, memory: usize, portal: usize) {
     let mut space = AddressSpace::new();
     for region in layout.iter() {
         log::info!("{region}");
-        use linker::KernelRegionTitle::*;
+        use tg_linker::KernelRegionTitle::*;
         let flags = match region.title {
             Text => "X_RV",
             Rodata => "__RV",
@@ -187,13 +187,13 @@ mod impls {
     use crate::{APPS, PROCESSOR};
     use alloc::alloc::alloc_zeroed;
     use core::{alloc::Layout, ptr::NonNull};
-    use kernel_vm::{
+    use tg_kernel_vm::{
         page_table::{MmuMeta, Pte, Sv39, VAddr, VmFlags, PPN, VPN},
         PageManager,
     };
-    use rcore_console::log;
-    use rcore_task_manage::ProcId;
-    use syscall::*;
+    use tg_console::log;
+    use tg_task_manage::ProcId;
+    use tg_syscall::*;
     use xmas_elf::ElfFile;
 
     #[repr(transparent)]
@@ -262,7 +262,7 @@ mod impls {
 
     pub struct Console;
 
-    impl rcore_console::Console for Console {
+    impl tg_console::Console for Console {
         #[inline]
         fn put_char(&self, c: u8) {
             #[allow(deprecated)]

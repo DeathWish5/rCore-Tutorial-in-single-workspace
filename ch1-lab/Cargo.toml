@@ -6,4 +6,4 @@ authors = ["YdrMaster <ydrml@hotmail.com>"]
 
 [dependencies]
 sbi-rt = { version = "0.0.2", features = ["legacy"] }
-rcore-console = { path = "../console" }
+tg-console = { path = "../tg-console" }

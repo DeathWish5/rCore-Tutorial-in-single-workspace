@@ -1,4 +1,4 @@
-use easy_fs::{BlockDevice, EasyFileSystem};
+use tg_easy_fs::{BlockDevice, EasyFileSystem};
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::sync::{Arc, Mutex};

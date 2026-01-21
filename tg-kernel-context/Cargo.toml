@@ -1,0 +1,18 @@
+[package]
+name = "tg-kernel-context"
+description = "Kernel context management for rCore tutorial OS, including task context switching."
+version = "0.1.0"
+edition = "2021"
+authors = ["YdrMaster <ydrml@hotmail.com>"]
+repository = "https://github.com/YdrMaster/rCore-Tutorial-in-single-workspace"
+documentation = "https://docs.rs/tg-kernel-context"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["rcore", "kernel", "context", "riscv"]
+categories = ["no-std", "embedded"]
+
+[features]
+foreign = ["spin"]
+
+[dependencies]
+spin = { version = "0.9", optional = true }

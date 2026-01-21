@@ -9,12 +9,12 @@ sbi-rt = { version = "0.0.2", features = ["legacy"] }
 xmas-elf = "0.8.0"
 riscv = "0.10.1"
 
-linker = { path = "../linker" }
-rcore-console = { path = "../console" }
-kernel-context = { path = "../kernel-context", features = ["foreign"] }
-kernel-alloc = { path = "../kernel-alloc" }
-kernel-vm = { path = "../kernel-vm" }
-syscall = { path = "../syscall", features = ["kernel"] }
+tg-linker = { path = "../tg-linker" }
+tg-console = { path = "../tg-console" }
+tg-kernel-context = { path = "../tg-kernel-context", features = ["foreign"] }
+tg-kernel-alloc = { path = "../tg-kernel-alloc" }
+tg-kernel-vm = { path = "../tg-kernel-vm" }
+tg-syscall = { path = "../tg-syscall", features = ["kernel"] }
 
 [build-dependencies]
-linker = { path = "../linker" }
+tg-linker = { path = "../tg-linker" }

@@ -87,46 +87,46 @@ dependencies = [
 name = "ch1-lab"
 version = "0.0.1"
 dependencies = [
- "rcore-console",
  "sbi-rt",
+ "tg-console",
 ]
 
 [[package]]
 name = "ch2"
 version = "0.0.1"
 dependencies = [
- "kernel-context",
- "linker",
- "rcore-console",
  "riscv",
  "sbi-rt",
- "syscall",
+ "tg-console",
+ "tg-kernel-context",
+ "tg-linker",
+ "tg-syscall",
 ]
 
 [[package]]
 name = "ch3"
 version = "0.0.1"
 dependencies = [
- "kernel-context",
- "linker",
- "rcore-console",
  "riscv",
  "sbi-rt",
- "syscall",
+ "tg-console",
+ "tg-kernel-context",
+ "tg-linker",
+ "tg-syscall",
 ]
 
 [[package]]
 name = "ch4"
 version = "0.0.1"
 dependencies = [
- "kernel-alloc",
- "kernel-context",
- "kernel-vm",
- "linker",
- "rcore-console",
  "riscv",
  "sbi-rt",
- "syscall",
+ "tg-console",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-syscall",
  "xmas-elf",
 ]
 
@@ -134,16 +134,16 @@ dependencies = [
 name = "ch5"
 version = "0.0.1"
 dependencies = [
- "kernel-alloc",
- "kernel-context",
- "kernel-vm",
- "linker",
- "rcore-console",
- "rcore-task-manage",
  "riscv",
  "sbi-rt",
- "spin 0.9.8",
- "syscall",
+ "spin",
+ "tg-console",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-syscall",
+ "tg-task-manage",
  "xmas-elf",
 ]
 
@@ -151,17 +151,17 @@ dependencies = [
 name = "ch6"
 version = "0.0.1"
 dependencies = [
- "easy-fs",
- "kernel-alloc",
- "kernel-context",
- "kernel-vm",
- "linker",
- "rcore-console",
- "rcore-task-manage",
  "riscv",
  "sbi-rt",
- "spin 0.9.8",
- "syscall",
+ "spin",
+ "tg-console",
+ "tg-easy-fs",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-syscall",
+ "tg-task-manage",
  "virtio-drivers",
  "xmas-elf",
 ]
@@ -170,19 +170,19 @@ dependencies = [
 name = "ch7"
 version = "0.0.1"
 dependencies = [
- "easy-fs",
- "kernel-alloc",
- "kernel-context",
- "kernel-vm",
- "linker",
- "rcore-console",
- "rcore-task-manage",
  "riscv",
  "sbi-rt",
- "signal",
- "signal-impl",
- "spin 0.9.8",
- "syscall",
+ "spin",
+ "tg-console",
+ "tg-easy-fs",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-signal",
+ "tg-signal-impl",
+ "tg-syscall",
+ "tg-task-manage",
  "virtio-drivers",
  "xmas-elf",
 ]
@@ -191,20 +191,20 @@ dependencies = [
 name = "ch8"
 version = "0.0.1"
 dependencies = [
- "easy-fs",
- "kernel-alloc",
- "kernel-context",
- "kernel-vm",
- "linker",
- "rcore-console",
- "rcore-task-manage",
  "riscv",
  "sbi-rt",
- "signal",
- "signal-impl",
- "spin 0.9.8",
- "sync",
- "syscall",
+ "spin",
+ "tg-console",
+ "tg-easy-fs",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-signal",
+ "tg-signal-impl",
+ "tg-sync",
+ "tg-syscall",
+ "tg-task-manage",
  "virtio-drivers",
  "xmas-elf",
 ]
@@ -274,14 +274,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6f6c584413bb642e0f8c33faa63d7bd285335eb01b4db80be4119926ddcb96be"
 
 [[package]]
-name = "easy-fs"
-version = "0.1.0"
-dependencies = [
- "bitflags",
- "spin 0.7.1",
-]
-
-[[package]]
 name = "embedded-hal"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -324,34 +316,6 @@ name = "is_terminal_polyfill"
 version = "1.70.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7943c866cc5cd64cbc25b2e01621d07fa8eb2a1a23160ee81ce38704e97b8ecf"
-
-[[package]]
-name = "kernel-alloc"
-version = "0.1.0"
-dependencies = [
- "customizable-buddy 0.0.3",
- "log",
- "page-table",
-]
-
-[[package]]
-name = "kernel-context"
-version = "0.1.0"
-dependencies = [
- "spin 0.9.8",
-]
-
-[[package]]
-name = "kernel-vm"
-version = "0.1.0"
-dependencies = [
- "page-table",
- "spin 0.9.8",
-]
-
-[[package]]
-name = "linker"
-version = "0.0.1"
 
 [[package]]
 name = "lock_api"
@@ -446,18 +410,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rcore-console"
-version = "0.0.0"
-dependencies = [
- "log",
- "spin 0.9.8",
-]
-
-[[package]]
-name = "rcore-task-manage"
-version = "0.0.0"
-
-[[package]]
 name = "riscv"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -522,35 +474,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "signal"
-version = "0.1.0"
-dependencies = [
- "kernel-context",
- "signal-defs",
-]
-
-[[package]]
-name = "signal-defs"
-version = "0.1.0"
-dependencies = [
- "numeric-enum-macro",
-]
-
-[[package]]
-name = "signal-impl"
-version = "0.1.0"
-dependencies = [
- "kernel-context",
- "signal",
-]
-
-[[package]]
-name = "spin"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13287b4da9d1207a4f4929ac390916d64eacfe236a487e9a9f5b3be392be5162"
-
-[[package]]
 name = "spin"
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -583,22 +506,93 @@ dependencies = [
 ]
 
 [[package]]
-name = "sync"
+name = "tg-console"
 version = "0.1.0"
 dependencies = [
- "rcore-task-manage",
- "riscv",
- "spin 0.9.8",
+ "log",
+ "spin",
 ]
 
 [[package]]
-name = "syscall"
+name = "tg-easy-fs"
 version = "0.1.0"
 dependencies = [
  "bitflags",
- "signal-defs",
- "spin 0.9.8",
+ "spin",
 ]
+
+[[package]]
+name = "tg-kernel-alloc"
+version = "0.1.0"
+dependencies = [
+ "customizable-buddy 0.0.3",
+ "log",
+ "page-table",
+]
+
+[[package]]
+name = "tg-kernel-context"
+version = "0.1.0"
+dependencies = [
+ "spin",
+]
+
+[[package]]
+name = "tg-kernel-vm"
+version = "0.1.0"
+dependencies = [
+ "page-table",
+ "spin",
+]
+
+[[package]]
+name = "tg-linker"
+version = "0.1.0"
+
+[[package]]
+name = "tg-signal"
+version = "0.1.0"
+dependencies = [
+ "tg-kernel-context",
+ "tg-signal-defs",
+]
+
+[[package]]
+name = "tg-signal-defs"
+version = "0.1.0"
+dependencies = [
+ "numeric-enum-macro",
+]
+
+[[package]]
+name = "tg-signal-impl"
+version = "0.1.0"
+dependencies = [
+ "tg-kernel-context",
+ "tg-signal",
+]
+
+[[package]]
+name = "tg-sync"
+version = "0.1.0"
+dependencies = [
+ "riscv",
+ "spin",
+ "tg-task-manage",
+]
+
+[[package]]
+name = "tg-syscall"
+version = "0.1.0"
+dependencies = [
+ "bitflags",
+ "spin",
+ "tg-signal-defs",
+]
+
+[[package]]
+name = "tg-task-manage"
+version = "0.1.0"
 
 [[package]]
 name = "toml"
@@ -645,8 +639,8 @@ name = "user_lib"
 version = "0.0.1"
 dependencies = [
  "customizable-buddy 0.0.2",
- "rcore-console",
- "syscall",
+ "tg-console",
+ "tg-syscall",
 ]
 
 [[package]]
@@ -780,11 +774,11 @@ name = "xtask"
 version = "0.0.1"
 dependencies = [
  "clap",
- "easy-fs",
  "once_cell",
  "os-xtask-utils",
  "serde",
  "serde_derive",
+ "tg-easy-fs",
  "toml",
 ]
 

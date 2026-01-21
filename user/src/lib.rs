@@ -5,16 +5,16 @@ mod heap;
 extern crate alloc;
 
 use core::alloc::Layout;
-use rcore_console::log;
+use tg_console::log;
 
-pub use rcore_console::{print, println};
-pub use syscall::*;
+pub use tg_console::{print, println};
+pub use tg_syscall::*;
 
 #[no_mangle]
 #[link_section = ".text.entry"]
 pub extern "C" fn _start() -> ! {
-    rcore_console::init_console(&Console);
-    rcore_console::set_log_level(option_env!("LOG"));
+    tg_console::init_console(&Console);
+    tg_console::set_log_level(option_env!("LOG"));
     heap::init();
 
     extern "C" {
@@ -45,15 +45,15 @@ pub fn getchar() -> u8 {
 
 struct Console;
 
-impl rcore_console::Console for Console {
+impl tg_console::Console for Console {
     #[inline]
     fn put_char(&self, c: u8) {
-        syscall::write(STDOUT, &[c]);
+        tg_syscall::write(STDOUT, &[c]);
     }
 
     #[inline]
     fn put_str(&self, s: &str) {
-        syscall::write(STDOUT, s.as_bytes());
+        tg_syscall::write(STDOUT, s.as_bytes());
     }
 }
 
