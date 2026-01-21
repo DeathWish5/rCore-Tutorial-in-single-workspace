@@ -420,12 +420,13 @@ mod impls {
 
         fn fork(&self, _caller: Caller) -> isize {
             let current = unsafe { PROCESSOR.current().unwrap() };
+            let parent_pid = current.pid;  // 先保存父进程 pid
             let mut child_proc = current.fork().unwrap();
             let pid = child_proc.pid;
             let context = &mut child_proc.context.context;
             *context.a_mut(0) = 0 as _;
             unsafe {
-                PROCESSOR.add(pid, child_proc, current.pid);
+                PROCESSOR.add(pid, child_proc, parent_pid);
             }
             pid.get_usize() as isize
         }

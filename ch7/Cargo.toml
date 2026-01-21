@@ -1,5 +1,5 @@
 [package]
-name = "ch7"
+name = "tg-ch7"
 version = "0.0.1"
 edition = "2021"
 authors = ["scPointer <jax01@foxmail.com>"]

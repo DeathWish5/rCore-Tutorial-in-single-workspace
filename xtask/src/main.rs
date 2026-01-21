@@ -70,7 +70,7 @@ impl BuildArgs {
     fn make(&self) -> PathBuf {
         let mut env: HashMap<&str, OsString> = HashMap::new();
         let package = match self.ch {
-            1 => if self.lab { "ch1-lab" } else { "ch1" }.to_string(),
+            1 => if self.lab { "tg-ch1-lab" } else { "tg-ch1" }.to_string(),
             2..=8 => {
                 user::build_for(self.ch, false);
                 env.insert(
@@ -81,7 +81,7 @@ impl BuildArgs {
                         .as_os_str()
                         .to_os_string(),
                 );
-                format!("ch{}", self.ch)
+                format!("tg-ch{}", self.ch)
             }
             _ => unreachable!(),
         };

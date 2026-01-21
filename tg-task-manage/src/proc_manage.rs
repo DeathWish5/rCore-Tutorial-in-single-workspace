@@ -77,7 +77,12 @@ impl<P, MP: Manage<P, ProcId> + Schedule<ProcId>> PManager<P, MP> {
     pub fn add(&mut self, id: ProcId, task: P, parent: ProcId) {
         self.manager.as_mut().unwrap().insert(id, task);
         self.manager.as_mut().unwrap().add(id);
-        if let Some(parent_relation) = self.rel_map.get_mut(&parent) {
+        // 只有当 parent 不是特殊的 usize::MAX（初始进程的父进程）时，才添加到父进程的 children 中
+        if parent.get_usize() != usize::MAX {
+            let parent_relation = self
+                .rel_map
+                .get_mut(&parent)
+                .expect("Parent process must exist in rel_map");
             parent_relation.add_child(id);
         }
         self.rel_map.insert(id, ProcRel::new(parent));

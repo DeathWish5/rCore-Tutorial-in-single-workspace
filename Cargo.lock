@@ -77,139 +77,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2fd1289c04a9ea8cb22300a459a72a385d7c73d3259e2ed7dcb2af674838cfa9"
 
 [[package]]
-name = "ch1"
-version = "0.0.1"
-dependencies = [
- "sbi-rt",
-]
-
-[[package]]
-name = "ch1-lab"
-version = "0.0.1"
-dependencies = [
- "sbi-rt",
- "tg-console",
-]
-
-[[package]]
-name = "ch2"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "tg-console",
- "tg-kernel-context",
- "tg-linker",
- "tg-syscall",
-]
-
-[[package]]
-name = "ch3"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "tg-console",
- "tg-kernel-context",
- "tg-linker",
- "tg-syscall",
-]
-
-[[package]]
-name = "ch4"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "tg-console",
- "tg-kernel-alloc",
- "tg-kernel-context",
- "tg-kernel-vm",
- "tg-linker",
- "tg-syscall",
- "xmas-elf",
-]
-
-[[package]]
-name = "ch5"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "spin",
- "tg-console",
- "tg-kernel-alloc",
- "tg-kernel-context",
- "tg-kernel-vm",
- "tg-linker",
- "tg-syscall",
- "tg-task-manage",
- "xmas-elf",
-]
-
-[[package]]
-name = "ch6"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "spin",
- "tg-console",
- "tg-easy-fs",
- "tg-kernel-alloc",
- "tg-kernel-context",
- "tg-kernel-vm",
- "tg-linker",
- "tg-syscall",
- "tg-task-manage",
- "virtio-drivers",
- "xmas-elf",
-]
-
-[[package]]
-name = "ch7"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "spin",
- "tg-console",
- "tg-easy-fs",
- "tg-kernel-alloc",
- "tg-kernel-context",
- "tg-kernel-vm",
- "tg-linker",
- "tg-signal",
- "tg-signal-impl",
- "tg-syscall",
- "tg-task-manage",
- "virtio-drivers",
- "xmas-elf",
-]
-
-[[package]]
-name = "ch8"
-version = "0.0.1"
-dependencies = [
- "riscv",
- "sbi-rt",
- "spin",
- "tg-console",
- "tg-easy-fs",
- "tg-kernel-alloc",
- "tg-kernel-context",
- "tg-kernel-vm",
- "tg-linker",
- "tg-signal",
- "tg-signal-impl",
- "tg-sync",
- "tg-syscall",
- "tg-task-manage",
- "virtio-drivers",
- "xmas-elf",
-]
-
-[[package]]
 name = "clap"
 version = "4.5.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -503,6 +370,139 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "tg-ch1"
+version = "0.0.1"
+dependencies = [
+ "sbi-rt",
+]
+
+[[package]]
+name = "tg-ch1-lab"
+version = "0.0.1"
+dependencies = [
+ "sbi-rt",
+ "tg-console",
+]
+
+[[package]]
+name = "tg-ch2"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "tg-console",
+ "tg-kernel-context",
+ "tg-linker",
+ "tg-syscall",
+]
+
+[[package]]
+name = "tg-ch3"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "tg-console",
+ "tg-kernel-context",
+ "tg-linker",
+ "tg-syscall",
+]
+
+[[package]]
+name = "tg-ch4"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "tg-console",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-syscall",
+ "xmas-elf",
+]
+
+[[package]]
+name = "tg-ch5"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "spin",
+ "tg-console",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-syscall",
+ "tg-task-manage",
+ "xmas-elf",
+]
+
+[[package]]
+name = "tg-ch6"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "spin",
+ "tg-console",
+ "tg-easy-fs",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-syscall",
+ "tg-task-manage",
+ "virtio-drivers",
+ "xmas-elf",
+]
+
+[[package]]
+name = "tg-ch7"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "spin",
+ "tg-console",
+ "tg-easy-fs",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-signal",
+ "tg-signal-impl",
+ "tg-syscall",
+ "tg-task-manage",
+ "virtio-drivers",
+ "xmas-elf",
+]
+
+[[package]]
+name = "tg-ch8"
+version = "0.0.1"
+dependencies = [
+ "riscv",
+ "sbi-rt",
+ "spin",
+ "tg-console",
+ "tg-easy-fs",
+ "tg-kernel-alloc",
+ "tg-kernel-context",
+ "tg-kernel-vm",
+ "tg-linker",
+ "tg-signal",
+ "tg-signal-impl",
+ "tg-sync",
+ "tg-syscall",
+ "tg-task-manage",
+ "virtio-drivers",
+ "xmas-elf",
 ]
 
 [[package]]

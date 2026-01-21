@@ -1,4 +1,4 @@
-﻿mod multislot_portal;
+mod multislot_portal;
 
 pub use multislot_portal::MultislotPortal;
 
@@ -249,6 +249,9 @@ unsafe extern "C" fn foreign_execute(ctx: *mut PortalCache) {
         // 回家！
         // 离开异界传送门直接跳到正常上下文的 stvec
         "   jr    a0",
+        // 显式添加结束标记（c.unimp = 0），确保代码以 [0x8502, 0] 序列结尾
+        // 这是因为新版 Rust 的 naked 函数不一定会自动在结尾生成 unimp 指令
+        "   .half 0",
         "   .option pop",
     )
 }
