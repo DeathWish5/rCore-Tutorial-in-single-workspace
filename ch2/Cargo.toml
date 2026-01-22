@@ -9,7 +9,8 @@ sbi-rt = { version = "0.0.2", features = ["legacy"] }
 riscv = "0.10.1"
 
 tg-linker = { path = "../tg-linker" }
-tg-console = { path = "../tg-console" }
+# tg-console = { path = "../tg-console" }
+tg-console = { version = "0.1.0-preview.1" }
 tg-kernel-context = { path = "../tg-kernel-context" }
 tg-syscall = { path = "../tg-syscall", features = ["kernel"] }
 

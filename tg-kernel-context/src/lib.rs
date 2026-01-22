@@ -135,37 +135,43 @@ impl LocalContext {
     /// - 上下文中的 `sepc` 指向有效的代码地址
     #[inline(never)]
     pub unsafe fn execute(&mut self) -> usize {
-        let mut sstatus = build_sstatus(self.supervisor, self.interrupt);
-        // 保存 self 指针和 sepc，避免 release 模式下 csrrw 破坏寄存器后的问题
-        let ctx_ptr = self as *mut Self;
-        let mut sepc = self.sepc;
-        let old_sscratch: usize;
-        // SAFETY: 内联汇编执行上下文切换，调用者已确保处于 S 模式且 CSR 可被修改
-        core::arch::asm!(
-            "   csrrw {old_ss}, sscratch, {ctx}
-                csrw  sepc    , {sepc}
-                csrw  sstatus , {sstatus}
-                addi  sp, sp, -8
-                sd    ra, (sp)
-                call  {execute_naked}
-                ld    ra, (sp)
-                addi  sp, sp,  8
-                csrw  sscratch, {old_ss}
-                csrr  {sepc}   , sepc
-                csrr  {sstatus}, sstatus
-            ",
-            ctx           = in       (reg) ctx_ptr,
-            old_ss        = out      (reg) old_sscratch,
-            sepc          = inlateout(reg) sepc,
-            sstatus       = inlateout(reg) sstatus,
-            execute_naked = sym execute_naked,
-        );
-        let _ = old_sscratch; // suppress unused warning
-        (*ctx_ptr).sepc = sepc;
-        sstatus
+        #[cfg(target_arch = "riscv64")]
+        {
+            let mut sstatus = build_sstatus(self.supervisor, self.interrupt);
+            // 保存 self 指针和 sepc，避免 release 模式下 csrrw 破坏寄存器后的问题
+            let ctx_ptr = self as *mut Self;
+            let mut sepc = self.sepc;
+            let old_sscratch: usize;
+            // SAFETY: 内联汇编执行上下文切换，调用者已确保处于 S 模式且 CSR 可被修改
+            core::arch::asm!(
+                "   csrrw {old_ss}, sscratch, {ctx}
+                    csrw  sepc    , {sepc}
+                    csrw  sstatus , {sstatus}
+                    addi  sp, sp, -8
+                    sd    ra, (sp)
+                    call  {execute_naked}
+                    ld    ra, (sp)
+                    addi  sp, sp,  8
+                    csrw  sscratch, {old_ss}
+                    csrr  {sepc}   , sepc
+                    csrr  {sstatus}, sstatus
+                ",
+                ctx           = in       (reg) ctx_ptr,
+                old_ss        = out      (reg) old_sscratch,
+                sepc          = inlateout(reg) sepc,
+                sstatus       = inlateout(reg) sstatus,
+                execute_naked = sym execute_naked,
+            );
+            let _ = old_sscratch; // suppress unused warning
+            (*ctx_ptr).sepc = sepc;
+            sstatus
+        }
+        #[cfg(not(target_arch = "riscv64"))]
+        unimplemented!("LocalContext::execute() is only supported on riscv64")
     }
 }
 
+#[cfg(target_arch = "riscv64")]
 #[inline]
 fn build_sstatus(supervisor: bool, interrupt: bool) -> usize {
     let mut sstatus: usize;
@@ -184,6 +190,13 @@ fn build_sstatus(supervisor: bool, interrupt: bool) -> usize {
     sstatus
 }
 
+#[cfg(not(target_arch = "riscv64"))]
+#[allow(dead_code)]
+#[inline]
+fn build_sstatus(_supervisor: bool, _interrupt: bool) -> usize {
+    unimplemented!("build_sstatus() is only supported on riscv64")
+}
+
 /// 线程切换核心部分。
 ///
 /// 通用寄存器压栈，然后从预存在 `sscratch` 里的上下文指针恢复线程通用寄存器。
@@ -195,6 +208,7 @@ fn build_sstatus(supervisor: bool, interrupt: bool) -> usize {
 /// - `sscratch` 中存放了有效的 `LocalContext` 指针
 /// - `sepc` 和 `sstatus` 已正确设置
 /// - 栈指针有效且有足够空间保存寄存器
+#[cfg(target_arch = "riscv64")]
 #[unsafe(naked)]
 unsafe extern "C" fn execute_naked() {
     core::arch::naked_asm!(
@@ -265,4 +279,10 @@ unsafe extern "C" fn execute_naked() {
         "   ret",
         "   .option pop",
     )
+}
+
+#[cfg(not(target_arch = "riscv64"))]
+#[allow(dead_code)]
+unsafe extern "C" fn execute_naked() {
+    unimplemented!("execute_naked() is only supported on riscv64")
 }

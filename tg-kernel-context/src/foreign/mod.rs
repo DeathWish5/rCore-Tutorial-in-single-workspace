@@ -3,6 +3,7 @@ mod multislot_portal;
 pub use multislot_portal::MultislotPortal;
 
 use crate::{build_sstatus, LocalContext};
+#[cfg(target_arch = "riscv64")]
 use spin::Lazy;
 
 /// 传送门缓存。
@@ -163,22 +164,30 @@ pub struct TpReg;
 impl SlotKey for TpReg {
     #[inline]
     fn index(self) -> usize {
-        let ans: usize;
-        // SAFETY: 只是读取 tp 寄存器的值，不会产生副作用
-        unsafe { core::arch::asm!("mv {}, tp", out(reg) ans) };
-        ans
+        #[cfg(target_arch = "riscv64")]
+        {
+            let ans: usize;
+            // SAFETY: 只是读取 tp 寄存器的值，不会产生副作用
+            unsafe { core::arch::asm!("mv {}, tp", out(reg) ans) };
+            ans
+        }
+        #[cfg(not(target_arch = "riscv64"))]
+        unimplemented!("TpReg::index() is only supported on riscv64")
     }
 }
 
 /// 传送门代码
+#[cfg(target_arch = "riscv64")]
 struct PortalText(&'static [u16]);
 
 /// 定位传送门代码段。
 ///
 /// 通过寻找结尾的 `jr a0` 和 `options(noreturn)`，在运行时定位传送门工作的裸函数代码段。
 /// 不必在链接时决定代码位置，可以在运行时将这段代码加载到任意位置。
+#[cfg(target_arch = "riscv64")]
 static PORTAL_TEXT: Lazy<PortalText> = Lazy::new(PortalText::new);
 
+#[cfg(target_arch = "riscv64")]
 impl PortalText {
     pub fn new() -> Self {
         // 32 是一个任取的不可能的下限
@@ -225,6 +234,7 @@ impl PortalText {
 /// - `ctx` 指向有效的 `PortalCache` 结构
 /// - `PortalCache` 中的 `satp`、`sepc`、`sstatus` 已正确初始化
 /// - 此函数的代码已被拷贝到公共地址空间
+#[cfg(target_arch = "riscv64")]
 #[unsafe(naked)]
 unsafe extern "C" fn foreign_execute(ctx: *mut PortalCache) {
     core::arch::naked_asm!(
