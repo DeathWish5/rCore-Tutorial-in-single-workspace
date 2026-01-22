@@ -1,10 +1,10 @@
 [package]
 name = "tg-sync"
 description = "Synchronization primitives for rCore tutorial OS, including mutex, semaphore, and condvar."
-version = "0.1.0"
+version = "0.1.0-preview.1"
 edition = "2021"
 authors = ["zflcs <zhaofangliang@foxmail.com>"]
-repository = "https://github.com/YdrMaster/rCore-Tutorial-in-single-workspace"
+repository = "https://github.com/rcore-os/rCore-Tutorial-in-single-workspace"
 documentation = "https://docs.rs/tg-sync"
 license = "MIT OR Apache-2.0"
 readme = "README.md"

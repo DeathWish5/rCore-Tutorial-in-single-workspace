@@ -1,10 +1,10 @@
 [package]
 name = "tg-linker"
 description = "Linker script generation utilities for rCore tutorial OS kernel."
-version = "0.1.0"
+version = "0.1.0-preview.1"
 edition = "2021"
 authors = ["YdrMaster <ydrml@hotmail.com>"]
-repository = "https://github.com/YdrMaster/rCore-Tutorial-in-single-workspace"
+repository = "https://github.com/rcore-os/rCore-Tutorial-in-single-workspace"
 documentation = "https://docs.rs/tg-linker"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
