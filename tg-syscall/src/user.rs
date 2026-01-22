@@ -257,6 +257,7 @@ pub fn condvar_wait(condvar_id: usize, mutex_id: usize) -> isize {
 /// - 它们直接执行 `ecall` 指令触发系统调用
 /// - 调用者需要确保参数符合对应系统调用的要求
 /// - 传递无效的指针或参数可能导致未定义行为
+#[cfg(target_arch = "riscv64")]
 pub mod native {
     use crate::SyscallId;
     use core::arch::asm;
@@ -401,5 +402,74 @@ pub mod native {
             in("a5") a5,
         );
         ret
+    }
+}
+
+/// 非 riscv64 架构的 stub 实现。
+#[cfg(not(target_arch = "riscv64"))]
+pub mod native {
+    use crate::SyscallId;
+
+    /// 执行无参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall0(_id: SyscallId) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
+    }
+
+    /// 执行带 1 个参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall1(_id: SyscallId, _a0: usize) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
+    }
+
+    /// 执行带 2 个参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall2(_id: SyscallId, _a0: usize, _a1: usize) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
+    }
+
+    /// 执行带 3 个参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall3(_id: SyscallId, _a0: usize, _a1: usize, _a2: usize) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
+    }
+
+    /// 执行带 4 个参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall4(
+        _id: SyscallId,
+        _a0: usize,
+        _a1: usize,
+        _a2: usize,
+        _a3: usize,
+    ) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
+    }
+
+    /// 执行带 5 个参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall5(
+        _id: SyscallId,
+        _a0: usize,
+        _a1: usize,
+        _a2: usize,
+        _a3: usize,
+        _a4: usize,
+    ) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
+    }
+
+    /// 执行带 6 个参数的系统调用。
+    #[inline(always)]
+    pub unsafe fn syscall6(
+        _id: SyscallId,
+        _a0: usize,
+        _a1: usize,
+        _a2: usize,
+        _a3: usize,
+        _a4: usize,
+        _a5: usize,
+    ) -> isize {
+        unimplemented!("syscall is only supported on riscv64")
     }
 }

@@ -89,6 +89,7 @@ macro_rules! boot0 {
         ///
         /// 这是一个裸函数，由 bootloader 直接调用。
         /// 调用时 CPU 处于 M 模式或 S 模式，需要正确设置栈指针后才能执行 Rust 代码。
+        #[cfg(target_arch = "riscv64")]
         #[unsafe(naked)]
         #[no_mangle]
         #[link_section = ".text.entry"]
@@ -103,6 +104,12 @@ macro_rules! boot0 {
                 "j  {main}",
                 main = sym rust_main,
             )
+        }
+
+        #[cfg(not(target_arch = "riscv64"))]
+        #[no_mangle]
+        unsafe extern "C" fn _start() -> ! {
+            unimplemented!("_start() is only supported on riscv64")
         }
     };
 }
