@@ -11,4 +11,7 @@ readme = "README.md"
 keywords = ["rcore", "linker", "no-std", "riscv"]
 categories = ["no-std", "embedded"]
 
+[package.metadata.docs.rs]
+targets = ["riscv64gc-unknown-none-elf"]
+
 [dependencies]

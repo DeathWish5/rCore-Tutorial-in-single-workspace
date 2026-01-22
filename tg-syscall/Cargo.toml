@@ -19,3 +19,6 @@ tg-signal-defs = { path = "../tg-signal-defs", version = "0.1.0-preview.1" }
 [features]
 kernel = []
 user = []
+
+[package.metadata.docs.rs]
+targets = ["riscv64gc-unknown-none-elf"]

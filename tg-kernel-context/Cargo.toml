@@ -14,5 +14,8 @@ categories = ["no-std", "embedded"]
 [features]
 foreign = ["spin"]
 
+[package.metadata.docs.rs]
+targets = ["riscv64gc-unknown-none-elf"]
+
 [dependencies]
 spin = { version = "0.9", optional = true }
